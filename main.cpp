@@ -23,12 +23,12 @@
 
 using namespace DirectX::SimpleMath;
 
-const int SCREEN_WIDTH = 1920;
-const int SCREEN_HEIGHT = 1080;
+const int SCREEN_WIDTH = 1366;
+const int SCREEN_HEIGHT = 768;
 
 Player player;
 
-const int nrOfVertices = 12;
+const int nrOfVertices = 30;
 
 HRESULT hr = S_OK;
 
@@ -177,7 +177,8 @@ void CreateTriangleData()
 
 	TriangleVertex triangleVertices[nrOfVertices] =
 	{
-		-10.0f, 10.0f, 0.0f,	//v00 pos
+		//front facing wall
+		-10.0f, 100.0f, 0.0f,	//v00 pos
 		1.0f, 0.0f, 0.0f,    //v00 uv
 
 		-10.0f, -10.0f, 0.0f,	//v01
@@ -186,14 +187,91 @@ void CreateTriangleData()
 		10.0f, -10.0f, 0.0f,  //v02
 		1.0f, 0.0f, 0.0f,   //v00 uv
 
-		-10.0f, 10.0f, 0.0f,	//v10 pos
+		-10.0f, 100.0f, 0.0f,	//v10 pos
 		1.0f, 0.0f, 0.0f,  //v00 uv
 
 		10.0f, -10.0f, 0.0f,	//v11
 		1.0f, 0.0f, 0.0f,   //v00 uv
 
-		10.0f, 10.0f, 0.0f,   //v12
+		10.0f, 100.0f, 0.0f,   //v12
 		1.0f, 0.0f, 0.0f,    //v00 uv
+
+		//west facing wall
+		-10.0f, 100.0f, 0.0f,	//v00 pos
+		0.0f, 1.0f, 0.0f,       //v00 uv
+
+		-10.0f, -10.0f, -10.0f,	//v01
+		0.0f, 1.0f, 0.0f,		//v00 uv
+
+		-10.0f, -10.0f, 0.0f,  //v02
+		0.0f, 1.0f, 0.0f,		 //v00 uv
+
+		-10.0f, 100.0f, 0.0f,	 //v10 pos
+		0.0f, 1.0f, 0.0f,		 //v00 uv
+
+		-10.0f, 100.0f, -10.0f,	 //v11
+		0.0f, 1.0f, 0.0f,	     //v00 uv
+
+		-10.0f, -10.0f, -10.0f,  //v12
+		0.0f, 1.0f, 0.0f,	     //v00 uv
+
+		//east facing wall
+		10.0f, 100.0f, 0.0f,	//v00 pos
+		0.0f, 0.0f, 1.0f,       //v00 uv
+
+		10.0f, -10.0f, 0.0f,	//v01
+		0.0f, 0.0f, 1.0f,		//v00 uv
+
+		10.0f, -10.0f, -10.0f,  //v02
+		0.0f, 0.0f, 1.0f,		 //v00 uv
+
+		10.0f, 100.0f, 0.0f,	 //v10 pos
+		0.0f, 0.0f, 1.0f,		 //v00 uv
+
+		10.0f, -10.0f, -10.0f,	 //v11
+		0.0f, 0.0f, 1.0f,	     //v00 uv
+
+		10.0f, 100.0f, -10.0f,  //v12
+		0.0f, 0.0f, 1.0f,	     //v00 uv
+
+		//south
+		//west facing wall
+		-10.0f, 100.0f, 0.0f,	//v00 pos
+		1.0f, 0.0f, 0.0f,       //v00 uv
+
+		-10.0f, -10.0f, -10.0f,	//v01
+		0.0f, 1.0f, 0.0f,		//v00 uv
+
+		-10.0f, -10.0f, 0.0f,  //v02
+		0.0f, 1.0f, 0.0f,		 //v00 uv
+
+		-10.0f, 100.0f, 0.0f,	 //v10 pos
+		1.0f, 0.0f, 0.0f,		 //v00 uv
+
+		-10.0f, 100.0f, -10.0f,	 //v11
+		1.0f, 0.0f, 0.0f,	     //v00 uv
+
+		-10.0f, -10.0f, -10.0f,  //v12
+		0.0f, 1.0f, 0.0f,	     //v00 uv
+
+		//floor
+		-10.0f, 0.0f, 0.0f,	//v00 pos
+		1.0f, 0.0f, 0.0f,       //v00 uv
+
+		-10.0f, 0.0f, -10.0f,	//v01
+		0.0f, 1.0f, 0.0f,		//v00 uv
+
+		10.0f, 0.0f, -10.0f,  //v02
+		0.0f, 1.0f, 0.0f,		 //v00 uv
+
+		-10.0f, 0.0f, 0.0f,	 //v10 pos
+		1.0f, 0.0f, 0.0f,		 //v00 uv
+
+		10.0f, 0.0f, -10.0f,	 //v11
+		1.0f, 0.0f, 0.0f,	     //v00 uv
+
+		10.0f, 0.0f, 0.0f,  //v12
+		0.0f, 1.0f, 0.0f,	     //v00 uv
 	};
 
 	D3D11_BUFFER_DESC bufferDesc;
@@ -244,7 +322,7 @@ void Render()
 	gDeviceContext->PSSetShaderResources(0, 1, &gTextureView);
 
 	cBuffers.world = Matrix::CreateRotationY(rotAngle);
-	cBuffers.view = Matrix::CreateLookAt(player.cameraPosition, player.lookAt, Vector3(0.0f, 1.0f, 0.0f));
+	cBuffers.view = Matrix::CreateLookAt(player.m_cameraPosition, player.m_lookAt, Vector3(0.0f, 1.0f, 0.0f));
 	cBuffers.projection = Matrix::CreatePerspectiveFieldOfView(3.14f * 0.45f, 640.0f / 480.0f, 0.5f, 200.0f);
 
 	rotAngle -= 0.000f;
@@ -292,7 +370,7 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 		while (WM_QUIT != msg.message)
 		{
 			float rotateSpeed = 0.0002;
-			float rotateDistance = 400;
+			float rotateDistance = 200;
 
 			POINT p;
 			bool success = GetCursorPos(&p);
@@ -303,14 +381,14 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 			{
 				if (p.x < rotateDistance)
 				{
-					//lookAtX += rotateSpeed;
+					player.rotateCharacter(1, 0);
 				}
 			}
 			if (p.x > SCREEN_WIDTH / 2)
 			{
 				if (p.x > SCREEN_WIDTH - rotateDistance)
 				{
-					//lookAtX -= rotateSpeed;
+					player.rotateCharacter(-1, 0);
 				}
 			}
 
@@ -318,16 +396,18 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 			{
 				if (p.y < rotateDistance)
 				{
-					//lookAtY += rotateSpeed;
+					player.rotateCharacter(0, 1);
 				}
 			}
 			if (p.y > SCREEN_HEIGHT / 2)
 			{
 				if (p.y > SCREEN_HEIGHT - rotateDistance)
 				{
-					//lookAtY -= rotateSpeed;
+					player.rotateCharacter(0, -1);
 				}
 			}
+
+			player.Update();
 
 			if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 			{
@@ -417,7 +497,7 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam 
 		case VK_SPACE:
 			player.moveCharacter(0, 1, 0);
 			break;
-		case VK_SHIFT:
+		case VK_CONTROL:
 			player.moveCharacter(0, -1, 0);
 			break;
 		}

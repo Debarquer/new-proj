@@ -15,7 +15,7 @@ float4 PS_main(VS_OUT input) : SV_Target
 	float4 s = input.Color;
 
 	float3 norNormal = normalize(input.normal);
-	float3 norLightPos = normalize(input.otherPosition - float3(0.0, 0.0, -3.0));
+	float3 norLightPos = normalize(input.otherPosition - float3(0.0, 5.0, -3.0));
 
 	float angle = max(dot(norLightPos, norNormal), 0.0);
 
